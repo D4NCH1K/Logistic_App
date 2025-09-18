@@ -1,6 +1,6 @@
 from models.delivery_route import DeliveryRoute
 from models.delivery_package import DeliveryPackage
-#from models.package_status import PackageStatus
+from models.package_status import PackageStatus
 from models.trucks import Trucks
 from models.country_map import truck
 from models.truck_status import TruckStatus
@@ -29,8 +29,10 @@ class ApplicationData:
         arrival_time = route.arrival_time()
         for city, arrival in arrival_time:
             if city == package.end_location:
-                package.expected_arrival = arrival
-                break
+               package.expected_arrival = arrival
+               return arrival
+        package.expected_arrival = None
+        return None
 
     @staticmethod
     def best_route_for_package(start, end):
@@ -39,29 +41,11 @@ class ApplicationData:
     def create_route(self, location: list[str], departure_time: datetime):
         route = DeliveryRoute(location, departure_time)
         self._routs.append(route)
-
-        for t in self._trucks:
-            if t.status == TruckStatus.FREE:
-                t.route = route
-                t.status = TruckStatus.ON_THE_WAY
-                route.truck = t
-                break
         return route
 
     def create_package(self, start_location, end_location, weight, contact_info):
         package = DeliveryPackage(start_location, end_location, weight, contact_info)
         self._packages.append(package)
-
-        for route in self._routs:
-            if start_location in route.location and end_location in route.location:
-                t = route.truck
-                t_cap = sum(p.weight for p in t.packages)
-                dist = route.calculate_km()
-                if t_cap + weight <= t.capacity and dist <= t.max_range:
-                    t.packages.append(package)
-                    package.truck = t
-                    self.expected_time(package, route)
-                    break
         return package
 
     def remove_route(self, route_id):
@@ -70,7 +54,9 @@ class ApplicationData:
             self._routs.remove(route)
 
     def remove_package(self, delivery_id):
-        self._packages.remove(delivery_id)
+        package = self.find_package(delivery_id)
+        if package:
+            self._packages.remove(package)
 
     def find_route(self, route_id: int):
         for route in self._routs:

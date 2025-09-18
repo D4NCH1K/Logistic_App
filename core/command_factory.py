@@ -8,6 +8,9 @@ from comands.find_package import FindPackage
 from comands.remove_package import RemovePackage
 from comands.view_package import ViewPackage
 from comands.view_truck import ViewTruck
+from comands.route_selection import PackageForRoute
+from comands.view_free_truck import ViewFreeTruck
+from comands.assignee_packages import AssigneePackages
 
 class CommandFactory:
     def __init__(self, data: ApplicationData):
@@ -34,6 +37,12 @@ class CommandFactory:
         if cmd.lower() == "removepackage":
             return RemovePackage(params, self._app_data)
 
+        if cmd.lower() == "routeforpackage":
+            return PackageForRoute(params, self._app_data)
+
+        if cmd.lower() == "viewfreetruck":
+            return ViewFreeTruck(params, self._app_data)
+
         if cmd.lower() == "viewroute":
             return ViewRoute(params, self._app_data)
 
@@ -42,5 +51,8 @@ class CommandFactory:
 
         if cmd.lower() == "viewtruck":
             return ViewTruck(params, self._app_data)
+
+        if cmd.lower() == "assigneepackages":
+            return AssigneePackages(params, self._app_data)
 
         raise ValueError(f'Invalid command name: {cmd}!')

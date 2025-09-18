@@ -23,10 +23,6 @@ class Trucks:
 
     def info(self):
         return (
-            f"Vehicle_id: {self.vehicle_id}\n"
-            f"Name: {self.name}\n"
-            f"Capacity: {self.capacity}\n"
-            f"Max range: {self.max_range}\n"
-            f"Status: {self.status}\n"
-            f"Location: {self.current_loc}"
+            f"Truck #{self.vehicle_id} - {self.name}\n"
+            f"Location: {self.current_loc} | Capacity: {self.capacity:}kg| Max Range: {self.max_range:}km | Status: {self.status}"
         )

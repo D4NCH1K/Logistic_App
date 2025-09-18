@@ -9,9 +9,9 @@ class ViewRoute(BaseCommand):
 
     def execute(self):
         if not self.app_data.routs:
-            return f"Route not found."
+            return f"Route not found!"
 
         route_info = []
         for route in self.app_data.routs:
             route_info.append(route.info())
-        return "\n".join(route_info)
+        return "\n\n".join(route_info)

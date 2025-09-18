@@ -2,119 +2,132 @@ from core.application_data import ApplicationData
 from core.command_factory import CommandFactory
 from core.engine import Engine
 
-app_data = ApplicationData()
-cmd_factory = CommandFactory(app_data)
-engine = Engine(cmd_factory)
+# app_data = ApplicationData()
+# cmd_factory = CommandFactory(app_data)
+# engine = Engine(cmd_factory)
+#
+# engine.start()
 
-engine.start()
+def main():
+    app_data = ApplicationData()
+    cmd_factory = CommandFactory(app_data)
+    while True:
+        print("Logistics App Main Menu")
+        print("1. Packages")
+        print("2. Routes")
+        print("3. Trucks")
+        print("0. Exit")
 
-""""
-createroute SYD MEL
-createroute SYD MEL
-findroute 1
-findroute 2
-removeroute 1
-removeroute 2
-createpackage SYD MEL 40 IV
-createpackage SYD MEL 15 IV
-createpackage SYD MEL 15 IV
-findpackage 1
-findpackage 2
-findpackage 3
-removepackage 1
-removepackage 2
-removepackage 3
-findpackage 1
-findpackage 2
-findpackage 3
-viewpackage
-viewroute
-end
+        choice = input("Please, select an option:").strip()
 
-createroute SYD MEL
-createpackage SYD MEL 10 iv 
-findroute 1 
-findpackage 1
-removeroute 1 
-removepackage 1 
-findroute 1 
-findpackage 1 
-createroute MEL ASP 
-createpackage MEL ASP 40 WI 
-findroute 2 
-findpackage 2 
-viewroute 
-viewpackage 
-end
+        if choice == "1":
+            menu_packages(cmd_factory)
+        elif choice == "2":
+            menu_routes(cmd_factory)
+        elif choice == "3":
+            menu_trucks(cmd_factory)
+        elif choice == "0":
+            print("See ya")
+            break
+        else:
+            print("Invalid option!")
 
-createroute SYD MEL ASP PER
-createroute SYD MEL
-createpackage SYD MEL 10500 DAN
-createpackage MEL ASP 10500 IVO
-createpackage ASP PER 10500 ZDR
-createpackage SYD PER 10500 AS
-createpackage SYD MEL 55 IVAN
-viewpackage
-viewroute
-end
+def menu_packages(cmd_factory):
+    while True:
+        print("Logistics App Package Menu")
+        print("1. Create Package")
+        print("2. Find Package")
+        print("3. Remove Package")
+        print("4. Assign Package")
+        print("5  Choose Route For Package")
+        print("6. View All Packages")
+        print("0  Back To Main Menu")
 
-createroute SYD MEL ADL
-createroute SYD MEL
-createpackage SYD MEL 15000 DAN
-createpackage SYD MEL 15000 IVO
-createpackage SYD MEL 13000 ZDR
-createpackage SYD MEL 5000 AS
-viewpackage
-viewroute
-end
+        choice = input("Please, select an option:").strip()
+        cmd = None
 
-createroute SYD MEL ADL
-createroute SYD MEL
-createroute MEL ASP BRI
-createroute DAR PER
-createroute ADL BRI MEL
-createpackage SYD MEL 15000 DAN
-createpackage SYD MEL 15000 IVO
-createpackage SYD MEL 13000 ZDR
-createpackage SYD MEL 5000 AS
-createpackage MEL ASP 20000 MAX
-createpackage MEL ASP 15000 LUC
-createpackage DAR PER 30000 ANN
-viewpackage
-viewroute
-findroute 1
-findroute 3
-findpackage 1
-findpackage 5
-removeroute 2
-removepackage 3
-removepackage 7
-viewpackage
-viewroute
-end
+        if choice == "0":
+            break
+        elif choice == "1":
+            info = input("Enter package info (start_loc, end_loc, weight, contact_info): ").strip()
+            cmd = cmd_factory.create(f"createpackage {info}")
+        elif choice == "2":
+            package_id = input("Enter package ID: ").strip()
+            cmd = cmd_factory.create(f"findpackage {package_id}")
+        elif choice == "3":
+            package_id = input("Enter package ID to remove: ").strip()
+            cmd = cmd_factory.create(f"removepackage {package_id}")
+        elif choice == "4":
+            package_ids = input("Enter package IDs to assign (space-separated): ").strip()
+            cmd = cmd_factory.create(f"assigneepackages {package_ids}")
+        elif choice == "5":
+            package_id = input("Enter package ID to choose route: ").strip()
+            cmd = cmd_factory.create(f"routeforpackage {package_id}")
+        elif choice == "6":
+            cmd = cmd_factory.create("viewpackage")
+        else:
+            print("Invalid option!")
+            continue
 
-createroute SYD MEL ADL 
-createroute SYD MEL 
-createpackage SYD MEL 15000 DAN 
-createpackage SYD MEL 15000 IVO 
-createpackage SYD MEL 13000 ZDR 
-createpackage SYD MEL 5000 AS 
-removepackage 1 
-createpackage MEL ADL 15000 DAN 
-viewpackage 
-viewroute 
-end
+        if cmd:
+            print(cmd.execute())
 
-createroute SYD MEL ADL 
-createroute SYD MEL 
-createpackage SYD MEL 15000 DAN 
-createpackage SYD MEL 15000 IVO 
-createpackage SYD MEL 13000 ZDR 
-createpackage SYD MEL 5000 AS 
-removepackage 1 
-createroute MEL ADL
-createpackage MEL ADL 15000 DAN 
-viewpackage 
-viewroute 
-end
-"""
+
+def menu_routes(cmd_factory):
+    while True:
+        print("\n--- Routes Menu ---")
+        print("1. Create Route")
+        print("2. Find Route")
+        print("3. Remove Route")
+        print("4. View All Routes")
+        print("0. Back to Main Menu")
+
+        choice = input("Select an option: ").strip()
+        cmd = None
+
+        if choice == "0":
+            break
+        elif choice == "1":
+            info = input("Enter route info (start_loc, stops, end_loc): ").strip()
+            cmd = cmd_factory.create(f"createroute {info}")
+        elif choice == "2":
+            route_id = input("Enter route ID: ").strip()
+            cmd = cmd_factory.create(f"findroute {route_id}")
+        elif choice == "3":
+            route_id = input("Enter route ID to remove: ").strip()
+            cmd = cmd_factory.create(f"removeroute {route_id}")
+        elif choice == "4":
+            cmd = cmd_factory.create("viewroute")
+        else:
+            print("Invalid option!")
+            continue
+
+        if cmd:
+            print(cmd.execute())
+
+def menu_trucks(cmd_factory):
+    while True:
+        print("\n--- Trucks Menu ---")
+        print("1. View All Trucks")
+        print("2. View Free Trucks in City")
+        print("0. Back to Main Menu")
+
+        choice = input("Select an option: ").strip()
+        cmd = None
+
+        if choice == "0":
+            break
+        elif choice == "1":
+            cmd = cmd_factory.create("viewtruck")
+        elif choice == "2":
+            city = input("Enter city code: ").strip()
+            cmd = cmd_factory.create(f"viewfreetruck {city}")
+        else:
+            print("Invalid option!")
+            continue
+
+        if cmd:
+            print(cmd.execute())
+
+if __name__ == "__main__":
+    main()

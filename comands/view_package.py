@@ -14,4 +14,4 @@ class ViewPackage(BaseCommand):
         package_info = []
         for package in self.app_data.package:
             package_info.append(package.info())
-        return "\n".join(package_info)
+        return "\n\n".join(package_info)

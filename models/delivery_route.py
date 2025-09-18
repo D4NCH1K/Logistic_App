@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 from models.country_map import *
-from models.delivery_package import DeliveryPackage
 
 class DeliveryRoute:
     route_id = 1
@@ -16,7 +15,7 @@ class DeliveryRoute:
         self.start_location = location[0]
         self.end_location = location[-1]
         self.departure_time = departure_time or datetime.now()
-        self.truck = None
+        self.truck = []
 
     def calculate_km(self):
         total = 0
@@ -50,5 +49,5 @@ class DeliveryRoute:
             f"Route ID: {self.route_id}\n"
             f"Departure from: {self.start_location} to {self.end_location} at {self.departure_time.strftime('%b %dth, %H:%M, %Y')}\n"
             f"{arrival_text}\n"
-            f"Total distance: {self.calculate_km()}km\n"
+            f"Total distance: {self.calculate_km()}km"
         )

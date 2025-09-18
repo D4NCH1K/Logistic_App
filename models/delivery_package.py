@@ -1,5 +1,4 @@
 from models.package_status import PackageStatus
-from datetime import datetime, timedelta
 
 class DeliveryPackage:
 
@@ -15,6 +14,7 @@ class DeliveryPackage:
         self.contact_info = contact_info
         self.truck = None
         self.expected_arrival = None
+        self.route = None
         self.status = PackageStatus.TODO
 
     @property
@@ -28,13 +28,15 @@ class DeliveryPackage:
         self._weight = value
 
     def info(self):
+        route_p = " to ".join(self.route.location) if self.route else "Not assigned"
         return (
             f"Package ID: {self.delivery_id}\n"
-            f"Truck ID: {self.truck.truck_id if self.truck else 'Not assigned'}\n"
-            f"From: {self.start_location} to {self.end_location}\n"
-            f"Weight: {self.weight}\n"
+            f"Truck ID: {self.truck.vehicle_id if self.truck else 'Not assigned'}\n"
+            f"Delivery: {self.start_location} to {self.end_location}\n"
+            f"Route: {route_p}\n"
+            f"Weight: {self.weight}kg\n"
             f"Contact: {self.contact_info}\n"
             f"Status: {self.status}\n"
-            f"Expected Arrival: {self.expected_arrival if self.expected_arrival else 'Not assigned'}\n"
+            f"Expected Arrival: {self.expected_arrival if self.expected_arrival else 'Not assigned'}"
         )
 

@@ -8,8 +8,7 @@ class ViewTruck(BaseCommand):
         self._app_data = app_data
 
     def execute(self):
-        truck_info = []
-        for t in self._app_data.trucks:
-            truck_info.append(t.info())
-            truck_info.append("-" * 40)
-        return "\n".join(truck_info)
+        truck_info = [t.info() for t in self._app_data.trucks]
+        output = "\n\n".join(truck_info)
+        print(output)
+        return ""

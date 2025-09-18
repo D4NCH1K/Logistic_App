@@ -15,13 +15,4 @@ class CreatePackage(BaseCommand):
 
         package = self.app_data.create_package(start_location, end_location, weight, contact_info)
 
-        if package.truck:
-            return (
-                f"Package with ID {package.delivery_id} was created\n"
-                f"Assigned to Truck ID {package.truck.truck_id}"
-            )
-        else:
-            return (
-                f"Package with ID {package.delivery_id} was created\n"
-                f"Not rout found to assignee a package"
-            )
+        return f"Package with ID {package.delivery_id} was created"

@@ -13,5 +13,5 @@ class RemovePackage(BaseCommand):
 
         if not package:
             return f"Package with ID {delivery_id} not found!"
-        self.app_data.remove_package(package)
+        self.app_data.remove_package(delivery_id)
         return f"Package with ID {delivery_id} was removed!"
