@@ -8,6 +8,11 @@ class FindRoute(BaseCommand):
         self._app_data = app_data
 
     def execute(self):
+        if len(self._params) < 1:
+            raise ValueError("Please, enter the provided ID for route")
+        if len(self._params) > 1:
+            raise ValueError("You can use one ID for this command")
+
         route_id = int(self._params[0])
         route = self.app_data.find_route(route_id)
 

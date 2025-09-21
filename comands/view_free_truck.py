@@ -9,18 +9,22 @@ class ViewFreeTruck(BaseCommand):
         self._app_data = app_data
 
     def execute(self):
+        if len(self._params) < 1:
+            raise ValueError("Please, enter the city to view trucks")
+        if len(self._params) > 1:
+            raise ValueError("You can use one city for this command")
+
         city = self._params[0]
         free_truck = []
 
         for truck in self.app_data.trucks:
-            if truck.current_loc == city and truck.status == TruckStatus.FREE:
+            if truck.current_loc == city and (truck.status == TruckStatus.FREE or truck.status == TruckStatus.ON_THE_WAY):
                 free_truck.append(truck)
 
         if not free_truck:
-            print( f"Not free truck available in {city}\n")
+            return f"Not free truck available in {city}"
 
+
+        count = len(free_truck)
         output_lines = [truck.info() for truck in free_truck]
-        output = f"Free trucks in {city}:\n\n" + "\n\n".join(output_lines)
-        print(output)
-
-        return ""
+        return f"Free trucks in {city}: {count}\n\n" + "\n\n".join(output_lines)

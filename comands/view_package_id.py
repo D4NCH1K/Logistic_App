@@ -1,7 +1,7 @@
 from comands.basecomand.base_comand import  BaseCommand
 from core.application_data import ApplicationData
 
-class RemoveRoute(BaseCommand):
+class ViewPackageID(BaseCommand):
     def __init__(self, params: list[str], app_data: ApplicationData):
         super().__init__(params, app_data)
         self._params = params
@@ -9,14 +9,14 @@ class RemoveRoute(BaseCommand):
 
     def execute(self):
         if len(self._params) < 1:
-            raise ValueError("Please, enter the provided ID for route")
+            raise ValueError("Please, enter the provided ID for package")
         if len(self._params) > 1:
             raise ValueError("You can use one ID for this command")
 
-        route_id = int(self._params[0])
-        route = self.app_data.find_route(route_id)
+        delivery_id = int(self._params[0])
+        package = self.app_data.find_package(delivery_id)
 
-        if not route:
-            return f"Route with ID {route_id} not found!"
-        self.app_data.remove_route(route_id)
-        return f"Route with ID {route_id} was removed!"
+        if not package:
+            return f"Package with ID {delivery_id} not found!"
+
+        return package.info()

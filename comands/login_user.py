@@ -1,14 +1,14 @@
 from comands.basecomand.base_comand import  BaseCommand
 from core.application_data import ApplicationData
 
-class ViewTruck(BaseCommand):
+class LoginUser(BaseCommand):
     def __init__(self, params: list[str], app_data: ApplicationData):
         super().__init__(params, app_data)
         self._params = params
         self._app_data = app_data
 
     def execute(self):
-        truck_info = [t.info() for t in self._app_data.trucks]
-        output = "\n\n".join(truck_info)
+        login = self._params[0]
+        user = self.app_data.login(login)
 
-        return output
+        return f"User {user.login} logged successfully. Role: {user.user_role}"

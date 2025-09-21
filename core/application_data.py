@@ -1,16 +1,17 @@
 from models.delivery_route import DeliveryRoute
 from models.delivery_package import DeliveryPackage
-from models.package_status import PackageStatus
 from models.trucks import Trucks
 from models.country_map import truck
-from models.truck_status import TruckStatus
 from datetime import datetime
+from models.users import User
 
 class ApplicationData:
     def __init__(self):
         self._routs: list[DeliveryRoute] = []
         self._packages: list[DeliveryPackage] = []
         self._trucks: list[Trucks] = truck
+        self._users: list[User] = []
+        self._logged_user = None
 
     @property
     def routs(self):
@@ -24,6 +25,10 @@ class ApplicationData:
     def trucks(self):
         return tuple(self._trucks)
 
+    @property
+    def users(self):
+        return tuple(self._users)
+
     @staticmethod
     def expected_time(package, route):
         arrival_time = route.arrival_time()
@@ -34,10 +39,6 @@ class ApplicationData:
         package.expected_arrival = None
         return None
 
-    @staticmethod
-    def best_route_for_package(start, end):
-        pass
-
     def create_route(self, location: list[str], departure_time: datetime):
         route = DeliveryRoute(location, departure_time)
         self._routs.append(route)
@@ -47,6 +48,26 @@ class ApplicationData:
         package = DeliveryPackage(start_location, end_location, weight, contact_info)
         self._packages.append(package)
         return package
+
+    def login(self, login):
+        user = User(login)
+        self._users.append(user)
+        self._logged_user = user
+        return user
+
+    @property
+    def logged_in_user(self):
+        if self.has_logged_in_user:
+            return self._logged_user
+        else:
+            raise ValueError('There is no logged in user.')
+
+    @property
+    def has_logged_in_user(self):
+        return self._logged_user is not None
+
+    def logout(self):
+        self._logged_user = None
 
     def remove_route(self, route_id):
         route = self.find_route(route_id)

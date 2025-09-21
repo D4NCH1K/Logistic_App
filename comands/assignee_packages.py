@@ -11,7 +11,7 @@ class AssigneePackages(BaseCommand):
 
     def execute(self):
         if not self._params:
-            return "Package not found"
+            return "Please, select a package to assign"
 
         assigned = []
         passed = []
@@ -84,7 +84,7 @@ class AssigneePackages(BaseCommand):
                 result_lines.append(f"  #Package ID {delivery_id} > Route ID {route_id} > Truck ID {vehicle_id}")
 
         if passed:
-            result_lines.append("Skipped:")
+            result_lines.append(f"Skipped {len(passed)} packages:")
             for delivery_id, reason in passed:
                 result_lines.append(f"  #Package ID {delivery_id}: {reason}")
 
